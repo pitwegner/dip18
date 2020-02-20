@@ -104,7 +104,7 @@ def do_evaluation(config, datasets, len_past, len_future, save_predictions=False
             eval_dataset = dataset_cls(config.get(eval_key),
                                        var_len_seq=True,
                                        preprocessing_ops=preprocessing_ops)
-            assert eval_dataset.num_samples % batch_size == 0, 'number of samples must be divisible by batch size'
+            assert eval_dataset.num_samples % batch_size == 0, 'number of samples ({}) must be divisible by batch size ({})'.format(eval_dataset.num_samples, batch_size)
             num_eval_iterations = int(eval_dataset.num_samples/batch_size)
 
             with tf.name_scope(eval_key):
@@ -157,8 +157,7 @@ def do_evaluation(config, datasets, len_past, len_future, save_predictions=False
             sip_eval_sensors = [1, 2, 16, 17]
 
             # the remaining "sensors" are evaluation sensors
-            all_sensors = utils.SMPL_MAJOR_JOINTS if config.get('use_reduced_smpl') else list(
-                range(utils.SMPL_NR_JOINTS))
+            all_sensors = utils.SMPL_MAJOR_JOINTS
             remaining_eval_sensors = [s for s in all_sensors if s not in tracking_sensors and s not in sip_eval_sensors]
 
             with utils.Stats(tracking_sensors, sip_eval_sensors, remaining_eval_sensors, logger) as stats:
@@ -271,7 +270,7 @@ if __name__ == '__main__':
         future_frames = [-1]
 
     # Parse which datasets to evaluate (name and batch_size).
-    known_datasets = {'dip-imu': ('test_our_data', 18),
+    known_datasets = {'dip-imu': ('test_our_data', 2),
                       'tc': ('test_total_capture', 45),
                       'playground': ('test_playground_data', 7)}
     to_evaluate = [known_datasets[e.lower()] for e in args.datasets]

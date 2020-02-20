@@ -23,9 +23,9 @@ import quaternion
 import cv2
 
 
-SMPL_MAJOR_JOINTS = [1, 2, 3, 4, 5, 6, 9, 12, 13, 14, 15, 16, 17, 18, 19]
-SMPL_NR_JOINTS = 24
-SMPL_PARENTS = [-1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21]
+SMPL_MAJOR_JOINTS = [3, 6, 9, 13, 14, 16, 17, 18, 19, 20, 21]
+SMPL_NR_JOINTS = 22
+SMPL_PARENTS = [-1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13, 14, 16, 17, 18, 19]
 
 
 def get_model_dir_timestamp(prefix="", suffix="", connector="_"):
@@ -194,8 +194,9 @@ def smpl_reduced_to_full(smpl_reduced):
     :param smpl_full: An np array of shape (seq_length, n_joints_reduced*dof)
     :return: An np array of shape (seq_length, 24*dof)
     """
+
     dof = smpl_reduced.shape[1] // len(SMPL_MAJOR_JOINTS)
-    assert dof == 9 or dof == 4
+    assert dof == 9 or dof == 4, dof
     seq_length = smpl_reduced.shape[0]
     smpl_full = np.zeros([seq_length, SMPL_NR_JOINTS * dof])
     for idx in range(SMPL_NR_JOINTS):
@@ -214,14 +215,14 @@ def smpl_reduced_to_full(smpl_reduced):
 def smpl_rot_to_global(smpl_rotations_local):
     """
     Converts local smpl rotations into global rotations by "unrolling" the kinematic chain.
-    :param smpl_rotations_local: np array of rotation matrices of shape (..., N, 3, 3), or (..., 216) where N
-      corresponds to the amount of joints in SMPL (currently 24)
+    :param smpl_rotations_local: np array of rotation matrices of shape (..., N, 3, 3), or (..., 198) where N
+      corresponds to the amount of joints in SMPL (currently 22)
     :return: The global rotations as an np array of the same shape as the input.
     """
     in_shape = smpl_rotations_local.shape
     do_reshape = in_shape[-1] != 3
     if do_reshape:
-        assert in_shape[-1] == 216
+        assert in_shape[-1] == SMPL_NR_JOINTS * 9
         rots = np.reshape(smpl_rotations_local, in_shape[:-1] + (SMPL_NR_JOINTS, 3, 3))
     else:
         rots = smpl_rotations_local

@@ -181,10 +181,12 @@ class Configuration(object):
                             help='Continue training with this model.')
         parser.add_argument('--model_type', required=False, choices=[C.MODEL_RNN, C.MODEL_BIRNN],
                             help='Determines model architecture.')
+        parser.add_argument('--data_type', required=False, choices=[C.IMU],
+                            help='Determines model architecture.')
         parser.add_argument('--json_file', type=str, help='Creates a model exactly how configured in the json file.')
 
         # Data management.
-        parser.add_argument('--data_file', required=False, default='v9', choices=['v9', 'own'],
+        parser.add_argument('--data_file', required=False, default='v9', choices=['v9', 'own', 'own2'],
                             help='Name of dataset file: v9 for AMASS, own for DIP-IMU')
         parser.add_argument('--' + C.PP_IMU_ORI_NORM, action="store_true",
                             help='Applies zero-mean unit-variance normalization on orientation.')
@@ -217,7 +219,7 @@ class Configuration(object):
         """
         parser.add_argument('--system', required=True, choices=list(Configuration.KNOWN_DATA_PATHS.keys()), type=str,
                             help='determines location of data and output paths')
-        parser.add_argument('--data_file', required=False, default='v9', choices=['v9', 'own'],
+        parser.add_argument('--data_file', required=False, default='v9', choices=['v9', 'own', 'own2'],
                             help='Name of dataset file: v9 for AMASS, own for DIP-IMU')
 
         # Experiment outputs.
@@ -335,13 +337,13 @@ class Configuration(object):
         config['learning_rate_decay_steps'] = 2000
         config['learning_rate_decay_rate'] = 0.96
 
-        config['checkpoint_every_step'] = 1000  # store checkpoint aver this many iterations
-        config['evaluate_every_step'] = 500  # validation and/or test performance
-        config['print_every_step'] = 50  # print
+        config['checkpoint_every_step'] = 100  # store checkpoint aver this many iterations
+        config['evaluate_every_step'] = 25  # validation and/or test performance
+        config['print_every_step'] = 25  # print
         config['tensorboard_verbose'] = 1  # 1 for latent space scalar summaries, 2 for histogram summaries (debugging).
 
         config['reduce_loss'] = C.R_MEAN_STEP
-        config['batch_size'] = 16
+        config['batch_size'] = 2
         config['num_epochs'] = 80
 
         config['grad_clip_by_norm'] = 1  # If it is 0, then gradient clipping will not be applied.
@@ -382,6 +384,7 @@ class Configuration(object):
         config = config or {}
 
         config['model_cls'] = 'RNNAutoRegressive'
+        config['model_type'] = C.MODEL_RNN
 
         config['input_layer'] = {}
         if config['input_layer'] == {}:
@@ -406,4 +409,5 @@ class Configuration(object):
     def birnn_model_config(config=None):
         config = Configuration.rnn_model_config(config)
         config['model_cls'] = 'BiRNN'
+        config['model_type'] = C.MODEL_BIRNN
         return config
