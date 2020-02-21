@@ -254,7 +254,7 @@ def joint_angle_error(predicted_pose_params, target_pose_params):
     :return: An np array of shape `(seq_length, 24)` containing the joint angle error in Radians for each joint.
     """
     seq_length, dof = predicted_pose_params.shape[0], predicted_pose_params.shape[1]
-    assert dof == 216, 'unexpected number of degrees of freedom'
+    assert dof == SMPL_NR_JOINTS*9, 'unexpected number of degrees of freedom'
     assert target_pose_params.shape[0] == seq_length and target_pose_params.shape[1] == dof, 'target_pose_params must match predicted_pose_params'
 
     # reshape to have rotation matrices explicit

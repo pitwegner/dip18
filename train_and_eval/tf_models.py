@@ -217,7 +217,7 @@ class BaseTemporalModel(object):
                         elif loss_type == C.MSE:
                             logli_term = -tf.reduce_sum(
                                 tf.square(self.target_pieces[target_idx] - self.ops_model_output[out_key + C.SUF_MU]),
-                                axis=2, keepdims=True)
+                                axis=2, keep_dims=True)
                         else:
                             raise Exception(loss_type + " is not implemented.")
 

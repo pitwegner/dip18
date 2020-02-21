@@ -367,9 +367,9 @@ class Configuration(object):
         nll_loss = dict()
         nll_loss['type'] = C.NLL_NORMAL
         nll_loss['out_key'] = "out"  # Looks for out_mu and out_sigma in model.output_ops
-        nll_loss['weight'] = 1
+        nll_loss['weight'] = 0
         nll_loss['target_idx'] = 0
-        config['loss'] = {"smpl": nll_loss}
+        config['loss'] = {"smpl": nll_loss, "mse": {'type': C.MSE, 'out_key': 'out', 'weight': 1, 'target_idx': 0}}
 
         # Use SMPL output of previous time step as input.
         config['use_smpl_input'] = False
