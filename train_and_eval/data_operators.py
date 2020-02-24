@@ -73,7 +73,7 @@ class NormalizeZeroMeanUnitVariance(Operator):
 
     def apply(self, input_data, target_data=None):
         input_operated, target_operated = self.operator_obj.apply(input_data, target_data)
-
+        self.data_std[self.data_std == 0] = 1e-6
         input_operated = (input_operated - self.data_mean) / self.data_std
         if target_operated is not None:
             target_operated = (target_operated - self.data_mean) / self.data_std
