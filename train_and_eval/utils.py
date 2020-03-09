@@ -23,9 +23,11 @@ import quaternion
 import cv2
 
 
-SMPL_MAJOR_JOINTS = [3, 6, 9, 13, 14, 16, 17, 18, 19, 20, 21]
-SMPL_NR_JOINTS = 22
-SMPL_PARENTS = [-1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13, 14, 16, 17, 18, 19]
+SMPL_MAJOR_JOINTS = [1, 2, 3, 4, 5, 6, 9, 12, 13, 14, 15, 16, 17, 18, 19]
+                   #[3, 6, 9, 13, 14, 16, 17, 18, 19, 20, 21]
+SMPL_NR_JOINTS = 24 #22
+SMPL_PARENTS = [-1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13, 14, 16, 17, 18, 19, 20, 21]
+              #[-1, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 12, 13, 14, 16, 17, 18, 19]
 
 
 def get_model_dir_timestamp(prefix="", suffix="", connector="_"):
